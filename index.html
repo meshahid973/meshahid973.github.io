@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayyan | Index</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #030304;
+            --accent: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        body {
+            margin: 0; background-color: var(--bg-deep); color: white;
+            font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
+        }
+
+        /* --- BACKGROUND --- */
+        #starfield {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .noise {
+            position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 40px 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; mix-blend-mode: difference; pointer-events: none;
+        }
+        .nav-item { font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+
+        /* --- SCROLLER --- */
+        .main-scroller {
+            height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory;
+            scroll-behavior: smooth; position: relative; z-index: 10;
+        }
+        .main-scroller::-webkit-scrollbar { width: 0; }
+
+        .section {
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            scroll-snap-align: center; perspective: 1200px;
+        }
+
+        /* --- FLASHCARD --- */
+        .flashcard {
+            background: var(--glass); 
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 80px; width: 90%; max-width: 700px; border-radius: 4px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            transform-style: preserve-3d; transition: transform 0.1s ease-out;
+            position: relative; overflow: hidden;
+        }
+
+        .flashcard::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg); transition: 0.5s; pointer-events: none;
+        }
+        .flashcard:hover::after { left: 100%; transition: 0.8s; }
+
+        h1 {
+            font-size: 5rem; margin: 0; font-weight: 900; letter-spacing: -4px;
+            background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: translateZ(40px);
+        }
+        p { font-size: 1.2rem; margin-top: 20px; opacity: 0.6; font-weight: 300; transform: translateZ(20px); }
+
+        /* --- BUTTONS --- */
+        .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; transform: translateZ(30px); }
+        
+        .action-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            padding: 20px 30px; color: white; cursor: pointer; text-align: left;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s var(--ease); border-radius: 4px; text-decoration: none;
+        }
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1); padding-left: 40px; border-color: rgba(255,255,255,0.3);
+        }
+        .btn-label { font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 15px; }
+        .btn-icon { opacity: 0.5; font-size: 0.9rem; }
+        .btn-arrow { opacity: 0; transform: translateX(-10px); transition: 0.3s; }
+        .action-btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
+
+        .scroll-down {
+            margin-top: 40px; background: none; border: none; color: rgba(255,255,255,0.3);
+            font-size: 1.5rem; cursor: pointer; transition: 0.3s; animation: bounce 2s infinite;
+        }
+        .scroll-down:hover { color: white; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+
+        /* --- OVERLAYS --- */
+        .overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 2000; overflow-y: auto; backdrop-filter: blur(10px);
+            animation: fadeIn 0.4s var(--ease);
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        .overlay-content { max-width: 1200px; margin: 80px auto; padding: 40px; }
+        .overlay-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 60px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;
+        }
+        .overlay-title { font-size: 3rem; font-weight: 800; letter-spacing: -2px; margin: 0; }
+        .close-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white;
+            padding: 10px 24px; border-radius: 100px; cursor: pointer; font-family: 'JetBrains Mono';
+            font-size: 0.8rem; text-transform: uppercase; transition: 0.3s;
+        }
+        .close-btn:hover { background: white; color: black; }
+
+        /* --- INTEREST GRIDS --- */
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .info-card {
+            background: rgba(255,255,255,0.05); padding: 30px; border-radius: 8px;
+            border: 1px solid var(--glass-border); transition: 0.3s;
+        }
+        .info-card:hover { border-color: white; transform: translateY(-5px); }
+        .card-icon { font-size: 2rem; margin-bottom: 15px; opacity: 0.8; }
+        .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+        .card-desc { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
+
+        .list-item {
+            display: flex; justify-content: space-between; padding: 20px;
+            border-bottom: 1px solid var(--glass-border); align-items: center;
+        }
+        .list-item:hover { background: rgba(255,255,255,0.03); }
+
+        @media (max-width: 768px) {
+            .flashcard { padding: 40px; width: 85%; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+    <div class="noise"></div>
+
+    <nav>
+        <div class="nav-item">Ayyan</div>
+        <div class="nav-item">Bahrain / 2026</div>
+    </nav>
+
+    <div class="main-scroller">
+        
+        <div class="section" id="sec1">
+            <div class="flashcard">
+                <h1>Ayyan</h1>
+                <p>Welcome to the index.</p>
+                <button class="scroll-down" onclick="document.getElementById('sec2').scrollIntoView();">↓</button>
+            </div>
+        </div>
+
+        <div class="section" id="sec2">
+            <div class="flashcard">
+                <h1>Profile</h1>
+                <p>15 years old. Based in Bahrain.<br>Exploring the intersection of policy and artificial intelligence.</p>
+                <button class="scroll-down" onclick="document.getElementById('sec3').scrollIntoView();">↓</button>
+            </div>
+        </div>
+
+        <div class="section" id="sec3">
+            <div class="flashcard">
+                <h1>Interests</h1>
+                <div class="btn-group">
+                    <button class="action-btn" onclick="openGeo()">
+                        <span class="btn-label"><i class="fas fa-globe btn-icon"></i> Geo-Politics</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                    <button class="action-btn" onclick="openAI()">
+                        <span class="btn-label"><i class="fas fa-brain btn-icon"></i> AI / Neural</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                    <button class="action-btn" onclick="openDebate()">
+                        <span class="btn-label"><i class="fas fa-comments btn-icon"></i> Formal Debate</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+                <button class="scroll-down" onclick="document.getElementById('sec4').scrollIntoView();">↓</button>
+            </div>
+        </div>
+
+        <div class="section" id="sec4">
+            <div class="flashcard">
+                <h1>Contact</h1>
+                <div class="btn-group">
+                    <a href="#" class="action-btn">
+                        <span class="btn-label"><i class="fab fa-discord btn-icon"></i> Discord</span>
+                        <span style="opacity:0.5; font-size:0.8rem;">@ayyan</span>
+                    </a>
+                    <a href="#" class="action-btn">
+                        <span class="btn-label"><i class="fab fa-instagram btn-icon"></i> Instagram</span>
+                        <span style="opacity:0.5; font-size:0.8rem;">@ayyan.bh</span>
+                    </a>
+                </div>
+                <button class="scroll-down" style="font-size:1rem; opacity:0.5;" onclick="document.getElementById('sec1').scrollIntoView();">↑ Return</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="geo-overlay" class="overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h2 class="overlay-title">Geo-Politics</h2>
+                <button class="close-btn" onclick="closeAll()">Close</button>
+            </div>
+            <div class="grid-cards">
+                <div class="info-card">
+                    <i class="fas fa-map-marked-alt card-icon"></i>
+                    <div class="card-title">Global Relations</div>
+                    <div class="card-desc">Analyzing diplomatic ties and shifting power dynamics in the Middle East and beyond.</div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-balance-scale-right card-icon"></i>
+                    <div class="card-title">Policy & Strategy</div>
+                    <div class="card-desc">Understanding the strategic decisions behind national security and trade agreements.</div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-history card-icon"></i>
+                    <div class="card-title">Historical Context</div>
+                    <div class="card-desc">Studying 20th-century history to predict future geopolitical trends.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-overlay" class="overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h2 class="overlay-title">AI & Neural</h2>
+                <button class="close-btn" onclick="closeAll()">Close</button>
+            </div>
+            <div class="grid-cards">
+                <div class="info-card">
+                    <i class="fas fa-project-diagram card-icon"></i>
+                    <div class="card-title">Neural Networks</div>
+                    <div class="card-desc">Deep Learning architectures, Transformers, and LLM fine-tuning mechanisms.</div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-code-branch card-icon"></i>
+                    <div class="card-title">Ethics of AI</div>
+                    <div class="card-desc">Debating the alignment problem and the socio-economic impact of automation.</div>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-robot card-icon"></i>
+                    <div class="card-title">Applications</div>
+                    <div class="card-desc">Using Python and PyTorch to build experimental predictive models.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="debate-overlay" class="overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h2 class="overlay-title">Debate</h2>
+                <button class="close-btn" onclick="closeAll()">Close</button>
+            </div>
+            <div class="grid-cards" style="grid-template-columns: 1fr;">
+                <div class="list-item">
+                    <div>
+                        <div style="font-size:1.5rem; font-weight:bold;">Model UN</div>
+                        <div style="opacity:0.6;">Delegate / Diplomacy / Resolution Drafting</div>
+                    </div>
+                    <i class="fas fa-user-tie" style="font-size:1.5rem; opacity:0.5;"></i>
+                </div>
+                <div class="list-item">
+                    <div>
+                        <div style="font-size:1.5rem; font-weight:bold;">Public Speaking</div>
+                        <div style="opacity:0.6;">Rhetoric / Persuasion / Logical Fallacies</div>
+                    </div>
+                    <i class="fas fa-microphone-alt" style="font-size:1.5rem; opacity:0.5;"></i>
+                </div>
+                <div class="list-item">
+                    <div>
+                        <div style="font-size:1.5rem; font-weight:bold;">Critical Thinking</div>
+                        <div style="opacity:0.6;">Deconstructing arguments and rebuilding frameworks.</div>
+                    </div>
+                    <i class="fas fa-puzzle-piece" style="font-size:1.5rem; opacity:0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- STARFIELD ---
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let stars = [];
+        let mouseX = 0, mouseY = 0;
+
+        function initStars() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width; canvas.height = height;
+            stars = [];
+            for(let i=0; i<300; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    z: Math.random() * 2 + 0.5,
+                    o: Math.random(),
+                    s: Math.random() * 0.05 + 0.02
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0,0,width,height);
+            ctx.fillStyle = "white";
+            
+            stars.forEach(star => {
+                star.y -= 0.2 * star.z; 
+                let offsetX = (mouseX - width/2) * 0.0002 * star.z;
+                let offsetY = (mouseY - height/2) * 0.0002 * star.z;
+                
+                if(star.y < 0) { star.y = height; star.x = Math.random() * width; }
+                
+                star.o += (Math.random() - 0.5) * 0.05;
+                if(star.o < 0.2) star.o = 0.2; if(star.o > 1) star.o = 1;
+
+                ctx.globalAlpha = star.o;
+                ctx.beginPath();
+                ctx.arc(star.x - offsetX, star.y - offsetY, star.z * 0.8, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        window.addEventListener('resize', initStars);
+        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+        initStars(); animateStars();
+
+        // --- TILT EFFECT ---
+        document.querySelectorAll('.flashcard').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) - rect.width/2;
+                const y = (e.clientY - rect.top) - rect.height/2;
+                card.style.transform = `perspective(1000px) rotateY(${x/40}deg) rotateX(${-y/40}deg)`;
+            });
+            card.addEventListener('mouseleave', () => card.style.transform = `perspective(1000px) rotateY(0) rotateX(0)`);
+        });
+
+        // --- OVERLAY LOGIC ---
+        function closeAll() {
+            document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openGeo() {
+            document.getElementById('geo-overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function openAI() {
+            document.getElementById('ai-overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function openDebate() {
+            document.getElementById('debate-overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    </script>
+</body>
+</html>
