@@ -3,54 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayyan | Index</title>
+    <title>Ayyan | Nexus</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #030304;
+            --bg-deep: #020203;
             --accent: #ffffff;
             --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.06);
+            --neon-blue: rgba(99, 102, 241, 0.6);
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
+
+        * { cursor: none; /* Hide default cursor for custom one */ }
 
         body {
             margin: 0; background-color: var(--bg-deep); color: white;
             font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
         }
 
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed; top: 0; left: 0; width: 20px; height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
+            transition: width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: difference;
+        }
+        #cursor-dot {
+            position: fixed; top: 0; left: 0; width: 4px; height: 4px;
+            background: white; border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 10000;
+        }
+        /* Cursor Hover State */
+        body.hovering #cursor { width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-color: transparent; backdrop-filter: invert(1); }
+
         /* --- BACKGROUND LAYERS --- */
         #nebula {
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(76, 29, 149, 0.15), transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.1), transparent 50%);
-            filter: blur(60px);
-            animation: nebula-drift 20s infinite alternate ease-in-out;
+                radial-gradient(circle at 10% 20%, rgba(76, 29, 149, 0.1), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.05), transparent 40%);
+            filter: blur(80px); animation: nebula-pulse 15s infinite alternate ease-in-out;
         }
-        @keyframes nebula-drift {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
+        @keyframes nebula-pulse { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
 
-        #starfield {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
+        #starfield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        
+        /* Floating Data Fragments */
+        .data-fragment {
+            position: fixed; font-family: 'JetBrains Mono'; font-size: 10px; 
+            color: rgba(255,255,255,0.15); user-select: none; pointer-events: none; z-index: 0;
+            animation: float-up linear infinite;
         }
+        @keyframes float-up { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.5; } to { transform: translateY(-10vh); opacity: 0; } }
 
         .noise {
-            position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.03;
+            position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        /* --- NAV --- */
+        /* --- UI ELEMENTS --- */
         nav {
             position: fixed; top: 0; left: 0; width: 100%; padding: 40px 60px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; pointer-events: none; mix-blend-mode: overlay;
+            z-index: 100; pointer-events: auto;
         }
-        .nav-item { font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; }
+        .nav-item { 
+            font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; 
+            letter-spacing: 2px; opacity: 0.8; text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            cursor: pointer; /* Trigger for custom cursor */
+        }
+        
+        /* Hyperdrive Toggle */
+        .warp-toggle {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer;
+            font-family: 'JetBrains Mono'; font-size: 10px; text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .warp-toggle:hover { background: white; color: black; box-shadow: 0 0 20px white; }
 
         /* --- SCROLLER --- */
         .main-scroller {
@@ -61,167 +94,210 @@
 
         .section {
             height: 100vh; display: flex; justify-content: center; align-items: center;
-            scroll-snap-align: center; perspective: 2000px; /* Flatter perspective */
+            scroll-snap-align: center; perspective: 2000px;
         }
 
         /* --- FLASHCARD --- */
         .flashcard {
-            background: var(--glass); 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            background: var(--glass); backdrop-filter: blur(16px);
             padding: 80px; width: 90%; max-width: 700px; border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 80px rgba(0,0,0,0.6); /* Softer shadow */
-            transform-style: preserve-3d; transition: transform 0.2s ease-out; /* Smoother transition */
-            position: relative; overflow: hidden;
+            border: 1px solid transparent; /* Hide default border for gradient */
+            box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+            transform-style: preserve-3d; opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+            position: relative;
         }
 
-        /* Subtle Sheen */
-        .flashcard::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.03), transparent 40%);
-            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        /* Holographic Border */
+        .flashcard::after {
+            content: ""; position: absolute; inset: 0; border-radius: 12px; padding: 1px;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.4), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none; animation: border-flow 4s linear infinite;
+            background-size: 200% 200%;
         }
-        .flashcard:hover::before { opacity: 1; }
+        @keyframes border-flow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        
+        /* Scroll Reveal State */
+        .section.active .flashcard { opacity: 1; transform: translateY(0); }
+        .section.active .flashcard.glitch-in { animation: glitch-reveal 0.4s forwards; }
+
+        @keyframes glitch-reveal {
+            0% { clip-path: inset(50% 0 50% 0); transform: scale(0.9) skew(10deg); filter: invert(1); }
+            20% { clip-path: inset(0 0 0 0); transform: scale(1.05) skew(-5deg); filter: invert(0); }
+            40% { clip-path: inset(10% 0 80% 0); }
+            60% { clip-path: inset(80% 0 10% 0); transform: scale(1); }
+            100% { clip-path: inset(0 0 0 0); }
+        }
 
         h1 {
             font-size: 5rem; margin: 0; font-weight: 900; letter-spacing: -3px;
             background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            transform: translateZ(20px); /* Reduced depth */
+            transform: translateZ(30px); cursor: pointer;
         }
-        p { font-size: 1.2rem; margin-top: 20px; opacity: 0.7; font-weight: 300; transform: translateZ(10px); line-height: 1.6; }
+        
+        /* Typing Effect Container */
+        .typewriter {
+            font-family: 'JetBrains Mono'; font-size: 1.1rem; color: rgba(255,255,255,0.7);
+            margin-top: 20px; min-height: 1.6em; transform: translateZ(20px);
+        }
+        .cursor-blink { display: inline-block; width: 8px; height: 1.2em; background: white; animation: blink-cursor 1s infinite; vertical-align: middle; }
+        @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* --- BUTTONS --- */
-        .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; transform: translateZ(15px); }
+        /* --- MAGNETIC BUTTONS --- */
+        .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; transform: translateZ(25px); }
         
         .action-btn {
             background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
             padding: 22px 30px; color: white; cursor: pointer; text-align: left;
             display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.4s var(--ease); border-radius: 6px; text-decoration: none;
+            transition: background 0.3s, border-color 0.3s; border-radius: 6px; text-decoration: none;
         }
-        .action-btn:hover {
-            background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); transform: translateX(5px);
-        }
-        .btn-label { font-weight: 500; font-size: 1.05rem; display: flex; align-items: center; gap: 15px; }
-        .btn-icon { opacity: 0.6; font-size: 0.9rem; }
-        .btn-arrow { opacity: 0; transform: translateX(-10px); transition: 0.3s; }
-        .action-btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
-
+        .action-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+        
         .scroll-down {
             margin-top: 50px; background: none; border: none; color: rgba(255,255,255,0.2);
             font-size: 1.5rem; cursor: pointer; transition: 0.3s; animation: bounce 2s infinite;
         }
-        .scroll-down:hover { color: white; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        .scroll-down:hover { color: white; text-shadow: 0 0 10px white; }
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(10px);} }
+
+        /* --- REPUTATION --- */
+        .review-card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            padding: 25px; border-radius: 8px; position: relative; transition: 0.3s; cursor: pointer;
+        }
+        .review-card:hover { border-color: rgba(255,255,255,0.3); transform: scale(1.02); }
+        .review-text { font-size: 1.1rem; font-style: italic; opacity: 0.9; display: block; margin-bottom: 8px; }
+        .review-author { font-family: 'JetBrains Mono'; font-size: 0.75rem; color: #a5b4fc; text-decoration: none; opacity: 0.7; }
+        .review-author:hover { text-decoration: underline; opacity: 1; }
 
         /* --- OVERLAYS --- */
         .overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 2000; overflow-y: auto; backdrop-filter: blur(10px);
-            animation: fadeIn 0.4s var(--ease);
+            z-index: 2000; overflow-y: auto; backdrop-filter: blur(20px);
+            animation: fadeIn 0.4s var(--ease); cursor: auto; /* Reset cursor inside overlays */
         }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .overlay * { cursor: auto; } /* Ensure internal elements have normal cursors */
+        .overlay .close-btn { cursor: pointer; }
 
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         .overlay-content { max-width: 1200px; margin: 80px auto; padding: 40px; }
-        .overlay-header {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 60px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;
-        }
-        .overlay-title { font-size: 3rem; font-weight: 800; letter-spacing: -2px; margin: 0; }
-        .close-btn {
-            background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white;
-            padding: 10px 24px; border-radius: 100px; cursor: pointer; font-family: 'JetBrains Mono';
-            font-size: 0.8rem; text-transform: uppercase; transition: 0.3s;
-        }
+        .overlay-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; margin-bottom: 40px; }
+        .overlay-title { font-size: 3rem; font-weight: 800; margin: 0; }
+        .close-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 24px; border-radius: 100px; cursor: pointer; transition: 0.3s; }
         .close-btn:hover { background: white; color: black; }
 
-        /* --- INTEREST GRIDS --- */
+        /* Grid Cards */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .info-card {
-            background: rgba(255,255,255,0.03); padding: 35px; border-radius: 12px;
-            border: 1px solid var(--glass-border); transition: 0.3s;
-        }
-        .info-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
-        .card-icon { font-size: 2rem; margin-bottom: 20px; opacity: 0.8; color: #a5b4fc; }
+        .info-card { background: rgba(255,255,255,0.03); padding: 35px; border-radius: 12px; border: 1px solid var(--glass-border); transition: 0.3s; }
+        .info-card:hover { border-color: white; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
         .card-desc { font-size: 0.95rem; opacity: 0.6; line-height: 1.6; }
 
-        .list-item {
-            display: flex; justify-content: space-between; padding: 25px;
-            border-bottom: 1px solid var(--glass-border); align-items: center; transition: 0.2s;
+        /* Click Particle */
+        .particle {
+            position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%;
+            pointer-events: none; animation: pop 0.6s ease-out forwards;
         }
-        .list-item:hover { background: rgba(255,255,255,0.03); padding-left: 30px; }
+        @keyframes pop { to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
 
         @media (max-width: 768px) {
             .flashcard { padding: 40px; width: 85%; }
             h1 { font-size: 3rem; }
+            #cursor, #cursor-dot { display: none; } /* Disable custom cursor on mobile */
+            * { cursor: auto; }
         }
     </style>
 </head>
 <body>
 
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
     <div id="nebula"></div>
     <canvas id="starfield"></canvas>
+    <div id="data-rain"></div>
     <div class="noise"></div>
 
     <nav>
-        <div class="nav-item">Ayyan</div>
-        <div class="nav-item">Bahrain / 2026</div>
+        <div class="nav-item hover-text" data-text="Ayyan">Ayyan</div>
+        <div style="display:flex; gap:20px; align-items:center;">
+            <button class="warp-toggle hover-trigger" onclick="toggleWarp()">Hyperdrive</button>
+            <div class="nav-item hover-text" data-text="Bahrain / 2026">Bahrain / 2026</div>
+        </div>
     </nav>
 
     <div class="main-scroller">
         
-        <div class="section" id="sec1">
+        <div class="section active" id="sec1">
             <div class="flashcard">
-                <h1>Ayyan</h1>
-                <p>Welcome to the index.</p>
-                <button class="scroll-down" onclick="document.getElementById('sec2').scrollIntoView();">↓</button>
+                <h1 class="hover-text" data-text="Ayyan">Ayyan</h1>
+                <div class="typewriter"><span id="type-target"></span><span class="cursor-blink"></span></div>
+                <button class="scroll-down hover-trigger" onclick="document.getElementById('sec2').scrollIntoView();">↓</button>
             </div>
         </div>
 
         <div class="section" id="sec2">
             <div class="flashcard">
-                <h1>Profile</h1>
+                <h1 class="hover-text" data-text="Profile">Profile</h1>
                 <p>15 years old. Based in Bahrain.<br>Analyzing the intersection of global policy and neural architecture.</p>
-                <button class="scroll-down" onclick="document.getElementById('sec3').scrollIntoView();">↓</button>
+                <button class="scroll-down hover-trigger" onclick="document.getElementById('sec3').scrollIntoView();">↓</button>
             </div>
         </div>
 
         <div class="section" id="sec3">
             <div class="flashcard">
-                <h1>Interests</h1>
+                <h1 class="hover-text" data-text="Interests">Interests</h1>
                 <div class="btn-group">
-                    <button class="action-btn" onclick="openGeo()">
-                        <span class="btn-label"><i class="fas fa-globe btn-icon"></i> Geo-Politics</span>
-                        <span class="btn-arrow">→</span>
+                    <button class="action-btn mag-btn hover-trigger" onclick="openOverlay('geo-overlay')">
+                        <span style="font-weight:600;"><i class="fas fa-globe" style="margin-right:10px; opacity:0.6;"></i> Geo-Politics</span>
+                        <span>→</span>
                     </button>
-                    <button class="action-btn" onclick="openAI()">
-                        <span class="btn-label"><i class="fas fa-brain btn-icon"></i> AI / Neural</span>
-                        <span class="btn-arrow">→</span>
+                    <button class="action-btn mag-btn hover-trigger" onclick="openOverlay('ai-overlay')">
+                        <span style="font-weight:600;"><i class="fas fa-brain" style="margin-right:10px; opacity:0.6;"></i> AI / Neural</span>
+                        <span>→</span>
                     </button>
-                    <button class="action-btn" onclick="openDebate()">
-                        <span class="btn-label"><i class="fas fa-comments btn-icon"></i> Formal Debate</span>
-                        <span class="btn-arrow">→</span>
+                    <button class="action-btn mag-btn hover-trigger" onclick="openOverlay('debate-overlay')">
+                        <span style="font-weight:600;"><i class="fas fa-comments" style="margin-right:10px; opacity:0.6;"></i> Formal Debate</span>
+                        <span>→</span>
                     </button>
                 </div>
-                <button class="scroll-down" onclick="document.getElementById('sec4').scrollIntoView();">↓</button>
+                <button class="scroll-down hover-trigger" onclick="document.getElementById('sec4').scrollIntoView();">↓</button>
             </div>
         </div>
 
         <div class="section" id="sec4">
             <div class="flashcard">
-                <h1>Contact</h1>
+                <h1 class="hover-text" data-text="Reputation">Reputation</h1>
                 <div class="btn-group">
-                    <a href="#" class="action-btn">
-                        <span class="btn-label"><i class="fab fa-discord btn-icon"></i> Discord</span>
+                    <div class="review-card mag-btn hover-trigger" onclick="window.open('https://yudafa.github.io', '_blank')">
+                        <span class="review-text">"Uhm, amazing person."</span>
+                        <span class="review-author">via yudafa.github.io ↗</span>
+                    </div>
+                    <div class="review-card mag-btn hover-trigger" onclick="window.open('https://todouro.github.io/', '_blank')">
+                        <span class="review-text">"Very inspiring patriotic teen."</span>
+                        <span class="review-author">via todouro.github.io ↗</span>
+                    </div>
+                </div>
+                <button class="scroll-down hover-trigger" onclick="document.getElementById('sec5').scrollIntoView();">↓</button>
+            </div>
+        </div>
+
+        <div class="section" id="sec5">
+            <div class="flashcard">
+                <h1 class="hover-text" data-text="Contact">Contact</h1>
+                <div class="btn-group">
+                    <a href="#" class="action-btn mag-btn hover-trigger">
+                        <span style="font-weight:600;"><i class="fab fa-discord" style="margin-right:10px;"></i> Discord</span>
                         <span style="opacity:0.5; font-size:0.8rem;">@ayyan</span>
                     </a>
-                    <a href="#" class="action-btn">
-                        <span class="btn-label"><i class="fab fa-instagram btn-icon"></i> Instagram</span>
+                    <a href="#" class="action-btn mag-btn hover-trigger">
+                        <span style="font-weight:600;"><i class="fab fa-instagram" style="margin-right:10px;"></i> Instagram</span>
                         <span style="opacity:0.5; font-size:0.8rem;">@ayyan.bh</span>
                     </a>
                 </div>
-                <button class="scroll-down" style="font-size:1rem; opacity:0.5;" onclick="document.getElementById('sec1').scrollIntoView();">↑ Return</button>
+                <button class="scroll-down hover-trigger" style="font-size:1rem; opacity:0.5;" onclick="document.getElementById('sec1').scrollIntoView();">↑ Return</button>
             </div>
         </div>
 
@@ -229,109 +305,130 @@
 
     <div id="geo-overlay" class="overlay">
         <div class="overlay-content">
-            <div class="overlay-header">
-                <h2 class="overlay-title">Geo-Politics</h2>
-                <button class="close-btn" onclick="closeAll()">Close</button>
-            </div>
+            <div class="overlay-header"><h2 class="overlay-title">Geo-Politics</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
             <div class="grid-cards">
-                <div class="info-card">
-                    <i class="fas fa-map-marked-alt card-icon"></i>
-                    <div class="card-title">Global Relations</div>
-                    <div class="card-desc">Analyzing diplomatic ties and shifting power dynamics in the Middle East and beyond.</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-balance-scale-right card-icon"></i>
-                    <div class="card-title">Policy & Strategy</div>
-                    <div class="card-desc">Understanding the strategic decisions behind national security and trade agreements.</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-history card-icon"></i>
-                    <div class="card-title">Historical Context</div>
-                    <div class="card-desc">Studying 20th-century history to predict future geopolitical trends.</div>
-                </div>
+                <div class="info-card"><div class="card-title">Global Relations</div><div class="card-desc">Analyzing diplomatic ties and shifting power dynamics in the Middle East and beyond.</div></div>
+                <div class="info-card"><div class="card-title">Policy & Strategy</div><div class="card-desc">Understanding strategic decisions behind national security and trade agreements.</div></div>
+                <div class="info-card"><div class="card-title">Historical Context</div><div class="card-desc">Studying 20th-century history to predict future geopolitical trends.</div></div>
             </div>
         </div>
     </div>
 
     <div id="ai-overlay" class="overlay">
         <div class="overlay-content">
-            <div class="overlay-header">
-                <h2 class="overlay-title">AI & Neural</h2>
-                <button class="close-btn" onclick="closeAll()">Close</button>
-            </div>
+            <div class="overlay-header"><h2 class="overlay-title">AI & Neural</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
             <div class="grid-cards">
-                <div class="info-card">
-                    <i class="fas fa-project-diagram card-icon"></i>
-                    <div class="card-title">Neural Networks</div>
-                    <div class="card-desc">Deep Learning architectures, Transformers, and LLM fine-tuning mechanisms.</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-code-branch card-icon"></i>
-                    <div class="card-title">Ethics of AI</div>
-                    <div class="card-desc">Debating the alignment problem and the socio-economic impact of automation.</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-robot card-icon"></i>
-                    <div class="card-title">Applications</div>
-                    <div class="card-desc">Using Python and PyTorch to build experimental predictive models.</div>
-                </div>
+                <div class="info-card"><div class="card-title">Neural Networks</div><div class="card-desc">Deep Learning architectures, Transformers, and LLM fine-tuning mechanisms.</div></div>
+                <div class="info-card"><div class="card-title">Ethics of AI</div><div class="card-desc">Debating the alignment problem and the socio-economic impact of automation.</div></div>
+                <div class="info-card"><div class="card-title">Applications</div><div class="card-desc">Using Python and PyTorch to build experimental predictive models.</div></div>
             </div>
         </div>
     </div>
 
     <div id="debate-overlay" class="overlay">
         <div class="overlay-content">
-            <div class="overlay-header">
-                <h2 class="overlay-title">Debate</h2>
-                <button class="close-btn" onclick="closeAll()">Close</button>
-            </div>
-            <div class="grid-cards" style="grid-template-columns: 1fr;">
-                <div class="list-item">
-                    <div>
-                        <div style="font-size:1.3rem; font-weight:700;">Model UN</div>
-                        <div style="opacity:0.6; margin-top:5px;">Delegate / Diplomacy / Resolution Drafting</div>
-                    </div>
-                    <i class="fas fa-user-tie" style="font-size:1.5rem; opacity:0.3;"></i>
-                </div>
-                <div class="list-item">
-                    <div>
-                        <div style="font-size:1.3rem; font-weight:700;">Public Speaking</div>
-                        <div style="opacity:0.6; margin-top:5px;">Rhetoric / Persuasion / Logical Fallacies</div>
-                    </div>
-                    <i class="fas fa-microphone-alt" style="font-size:1.5rem; opacity:0.3;"></i>
-                </div>
-                <div class="list-item">
-                    <div>
-                        <div style="font-size:1.3rem; font-weight:700;">Critical Thinking</div>
-                        <div style="opacity:0.6; margin-top:5px;">Deconstructing arguments and rebuilding frameworks.</div>
-                    </div>
-                    <i class="fas fa-puzzle-piece" style="font-size:1.5rem; opacity:0.3;"></i>
-                </div>
+            <div class="overlay-header"><h2 class="overlay-title">Debate</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
+            <div class="grid-cards">
+                <div class="info-card"><div class="card-title">Model UN</div><div class="card-desc">Delegate / Diplomacy / Resolution Drafting</div></div>
+                <div class="info-card"><div class="card-title">Public Speaking</div><div class="card-desc">Rhetoric / Persuasion / Logical Fallacies</div></div>
+                <div class="info-card"><div class="card-title">Critical Thinking</div><div class="card-desc">Deconstructing arguments and rebuilding frameworks.</div></div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- STARFIELD ---
+        // --- 1. QUANTUM CURSOR ---
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        // Smooth follow
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effect for buttons
+        document.querySelectorAll('.hover-trigger, .hover-text').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- 2. TEXT DECRYPTION EFFECT ---
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        
+        document.querySelectorAll('.hover-text').forEach(el => {
+            el.addEventListener('mouseover', event => {
+                let iterations = 0;
+                const originalText = event.target.dataset.text;
+                const interval = setInterval(() => {
+                    event.target.innerText = originalText.split("")
+                        .map((letter, index) => {
+                            if(index < iterations) return originalText[index];
+                            return letters[Math.floor(Math.random() * 26)];
+                        })
+                        .join("");
+                    
+                    if(iterations >= originalText.length) clearInterval(interval);
+                    iterations += 1 / 3;
+                }, 30);
+            });
+        });
+
+        // --- 3. CLICK EXPLOSION ---
+        document.addEventListener('click', e => {
+            const amount = 10;
+            for(let i=0; i<amount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                document.body.appendChild(particle);
+                
+                const x = e.clientX;
+                const y = e.clientY;
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                // Random Direction
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 50 + 20;
+                const dx = Math.cos(angle) * velocity + 'px';
+                const dy = Math.sin(angle) * velocity + 'px';
+                
+                particle.style.setProperty('--dx', dx);
+                particle.style.setProperty('--dy', dy);
+                
+                setTimeout(() => particle.remove(), 600);
+            }
+        });
+
+        // --- 4. HYPERDRIVE STARFIELD (Preserved) ---
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let stars = [];
-        let mouseX = 0, mouseY = 0;
+        let width, height, stars = [];
+        let isWarping = false;
 
         function initStars() {
-            width = window.innerWidth;
-            height = window.innerHeight;
+            width = window.innerWidth; height = window.innerHeight;
             canvas.width = width; canvas.height = height;
             stars = [];
-            for(let i=0; i<350; i++) {
+            for(let i=0; i<400; i++) {
                 stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    z: Math.random() * 2 + 0.5,
-                    o: Math.random(),
-                    s: Math.random() * 0.05 + 0.02,
-                    isShooting: false
+                    x: Math.random() * width, y: Math.random() * height,
+                    z: Math.random() * 2 + 0.5, o: Math.random(),
+                    size: Math.random() * 2
                 });
             }
         }
@@ -339,103 +436,109 @@
         function animateStars() {
             ctx.clearRect(0,0,width,height);
             ctx.fillStyle = "white";
-            
-            // Random Shooting Star Logic
-            if(Math.random() > 0.98) {
-                stars.push({
-                    x: Math.random() * width, y: 0, z: 0, o: 1, s: 0, isShooting: true, 
-                    vx: (Math.random() - 0.5) * 5, vy: Math.random() * 10 + 5
-                });
-            }
+            const speedMult = isWarping ? 30 : 1;
 
-            for(let i = 0; i < stars.length; i++) {
-                let star = stars[i];
+            stars.forEach(star => {
+                star.y -= (0.2 * star.z) * speedMult;
+                if(star.y < 0) { star.y = height; star.x = Math.random() * width; }
 
-                if(star.isShooting) {
-                    star.x += star.vx;
-                    star.y += star.vy;
-                    star.o -= 0.02;
+                ctx.beginPath();
+                if(isWarping) {
+                    ctx.strokeStyle = `rgba(255,255,255,${star.o})`;
+                    ctx.lineWidth = star.z;
+                    ctx.moveTo(star.x, star.y);
+                    ctx.lineTo(star.x, star.y + 40 * star.z);
+                    ctx.stroke();
+                } else {
+                    let offsetX = (mouseX - width/2) * 0.0002 * star.z;
+                    star.o += (Math.random() - 0.5) * 0.05;
+                    if(star.o < 0.2) star.o = 0.2; if(star.o > 1) star.o = 1;
                     
                     ctx.globalAlpha = star.o;
-                    ctx.beginPath();
-                    ctx.strokeStyle = "rgba(255,255,255," + star.o + ")";
-                    ctx.lineWidth = 2;
-                    ctx.moveTo(star.x, star.y);
-                    ctx.lineTo(star.x - star.vx * 3, star.y - star.vy * 3); // Trail
-                    ctx.stroke();
-
-                    if(star.o <= 0) { stars.splice(i, 1); i--; }
-                    continue;
+                    ctx.arc(star.x - offsetX, star.y, star.z * 0.8, 0, Math.PI*2);
+                    ctx.fill();
                 }
-
-                // Regular Stars
-                star.y -= 0.2 * star.z; 
-                let offsetX = (mouseX - width/2) * 0.0002 * star.z;
-                let offsetY = (mouseY - height/2) * 0.0002 * star.z;
-                
-                if(star.y < 0) { star.y = height; star.x = Math.random() * width; }
-                
-                star.o += (Math.random() - 0.5) * 0.05;
-                if(star.o < 0.2) star.o = 0.2; if(star.o > 1) star.o = 1;
-
-                ctx.globalAlpha = star.o;
-                ctx.beginPath();
-                ctx.arc(star.x - offsetX, star.y - offsetY, star.z * 0.8, 0, Math.PI*2);
-                ctx.fill();
-            }
+            });
             requestAnimationFrame(animateStars);
         }
 
+        function toggleWarp() {
+            isWarping = !isWarping;
+            const btn = document.querySelector('.warp-toggle');
+            btn.innerText = isWarping ? "DISENGAGE" : "HYPERDRIVE";
+            btn.style.background = isWarping ? "white" : "rgba(255,255,255,0.05)";
+            btn.style.color = isWarping ? "black" : "white";
+        }
+
         window.addEventListener('resize', initStars);
-        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
         initStars(); animateStars();
 
-        // --- SUBTLE 3D TILT EFFECT ---
+        // --- 5. FLOATING DATA RAIN (Preserved) ---
+        const rainContainer = document.getElementById('data-rain');
+        function createRain() {
+            const el = document.createElement('div');
+            el.className = 'data-fragment';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            el.innerText = Math.random() > 0.5 ? '0x' + Math.floor(Math.random()*16777215).toString(16) : Math.random().toString(2).substr(2, 8);
+            rainContainer.appendChild(el);
+            setTimeout(() => el.remove(), 20000);
+        }
+        setInterval(createRain, 800);
+
+        // --- 6. TYPEWRITER (Preserved) ---
+        const text = "Welcome to the index.";
+        const typeTarget = document.getElementById('type-target');
+        let typeIdx = 0;
+        function typeWriter() {
+            if (typeIdx < text.length) {
+                typeTarget.innerHTML += text.charAt(typeIdx);
+                typeIdx++;
+                setTimeout(typeWriter, 50 + Math.random() * 50);
+            }
+        }
+        setTimeout(typeWriter, 1000);
+
+        // --- 7. SCROLL GLITCH & TILT ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const card = entry.target.querySelector('.flashcard');
+                    if(card) {
+                        card.classList.remove('glitch-in');
+                        void card.offsetWidth;
+                        card.classList.add('glitch-in');
+                    }
+                }
+            });
+        }, { threshold: 0.4 });
+        document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+
+        document.querySelectorAll('.mag-btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width/2;
+                const y = e.clientY - rect.top - rect.height/2;
+                btn.style.transform = `translate(${x*0.3}px, ${y*0.3}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+        });
+
         document.querySelectorAll('.flashcard').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
-                // Localize mouse position within card
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                // For Rotation: Center point
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                // Glow follow
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
-
-                // Subtle Tilt Math (Divide by 100 for subtle effect)
-                const rotateX = ((y - centerY) / 100) * -1;
-                const rotateY = (x - centerX) / 100;
-
-                card.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                card.style.transform = `perspective(2000px) rotateX(${((y - rect.height/2)/100)*-1}deg) rotateY(${((x - rect.width/2)/100)}deg)`;
             });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(2000px) rotateX(0) rotateY(0)`;
-            });
+            card.addEventListener('mouseleave', () => card.style.transform = 'perspective(2000px) rotateX(0) rotateY(0)');
         });
 
-        // --- OVERLAY LOGIC ---
-        function closeAll() {
-            document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
-            document.body.style.overflow = 'auto';
-        }
-
-        function openGeo() {
-            document.getElementById('geo-overlay').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-        function openAI() {
-            document.getElementById('ai-overlay').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-        function openDebate() {
-            document.getElementById('debate-overlay').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+        function openOverlay(id) { document.getElementById(id).style.display = 'block'; document.body.style.overflow = 'hidden'; }
+        function closeAll() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); document.body.style.overflow = 'auto'; }
     </script>
 </body>
 </html>
