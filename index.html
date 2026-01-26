@@ -13,10 +13,11 @@
             --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.06);
             --neon-blue: rgba(99, 102, 241, 0.6);
+            --danger: #ff003c;
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { cursor: none; /* Hide default cursor for custom one */ }
+        * { cursor: none; }
 
         body {
             margin: 0; background-color: var(--bg-deep); color: white;
@@ -36,7 +37,6 @@
             background: white; border-radius: 50%;
             transform: translate(-50%, -50%); pointer-events: none; z-index: 10000;
         }
-        /* Cursor Hover State */
         body.hovering #cursor { width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-color: transparent; backdrop-filter: invert(1); }
 
         /* --- BACKGROUND LAYERS --- */
@@ -51,7 +51,6 @@
 
         #starfield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
         
-        /* Floating Data Fragments */
         .data-fragment {
             position: fixed; font-family: 'JetBrains Mono'; font-size: 10px; 
             color: rgba(255,255,255,0.15); user-select: none; pointer-events: none; z-index: 0;
@@ -73,10 +72,9 @@
         .nav-item { 
             font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; 
             letter-spacing: 2px; opacity: 0.8; text-shadow: 0 0 10px rgba(255,255,255,0.2);
-            cursor: pointer; /* Trigger for custom cursor */
+            cursor: pointer;
         }
         
-        /* Hyperdrive Toggle */
         .warp-toggle {
             background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
             color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer;
@@ -101,14 +99,13 @@
         .flashcard {
             background: var(--glass); backdrop-filter: blur(16px);
             padding: 80px; width: 90%; max-width: 700px; border-radius: 12px;
-            border: 1px solid transparent; /* Hide default border for gradient */
+            border: 1px solid transparent; 
             box-shadow: 0 30px 90px rgba(0,0,0,0.7);
             transform-style: preserve-3d; opacity: 0; transform: translateY(30px);
             transition: opacity 0.6s, transform 0.6s;
             position: relative;
         }
 
-        /* Holographic Border */
         .flashcard::after {
             content: ""; position: absolute; inset: 0; border-radius: 12px; padding: 1px;
             background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.4), transparent 60%);
@@ -119,15 +116,11 @@
         }
         @keyframes border-flow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
         
-        /* Scroll Reveal State */
         .section.active .flashcard { opacity: 1; transform: translateY(0); }
         .section.active .flashcard.glitch-in { animation: glitch-reveal 0.4s forwards; }
 
         @keyframes glitch-reveal {
             0% { clip-path: inset(50% 0 50% 0); transform: scale(0.9) skew(10deg); filter: invert(1); }
-            20% { clip-path: inset(0 0 0 0); transform: scale(1.05) skew(-5deg); filter: invert(0); }
-            40% { clip-path: inset(10% 0 80% 0); }
-            60% { clip-path: inset(80% 0 10% 0); transform: scale(1); }
             100% { clip-path: inset(0 0 0 0); }
         }
 
@@ -137,7 +130,6 @@
             transform: translateZ(30px); cursor: pointer;
         }
         
-        /* Typing Effect Container */
         .typewriter {
             font-family: 'JetBrains Mono'; font-size: 1.1rem; color: rgba(255,255,255,0.7);
             margin-top: 20px; min-height: 1.6em; transform: translateZ(20px);
@@ -145,7 +137,7 @@
         .cursor-blink { display: inline-block; width: 8px; height: 1.2em; background: white; animation: blink-cursor 1s infinite; vertical-align: middle; }
         @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* --- MAGNETIC BUTTONS --- */
+        /* --- BUTTONS --- */
         .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; transform: translateZ(25px); }
         
         .action-btn {
@@ -177,9 +169,9 @@
         .overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 2000; overflow-y: auto; backdrop-filter: blur(20px);
-            animation: fadeIn 0.4s var(--ease); cursor: auto; /* Reset cursor inside overlays */
+            animation: fadeIn 0.4s var(--ease); cursor: auto;
         }
-        .overlay * { cursor: auto; } /* Ensure internal elements have normal cursors */
+        .overlay * { cursor: auto; }
         .overlay .close-btn { cursor: pointer; }
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
@@ -189,25 +181,44 @@
         .close-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 24px; border-radius: 100px; cursor: pointer; transition: 0.3s; }
         .close-btn:hover { background: white; color: black; }
 
-        /* Grid Cards */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .info-card { background: rgba(255,255,255,0.03); padding: 35px; border-radius: 12px; border: 1px solid var(--glass-border); transition: 0.3s; }
         .info-card:hover { border-color: white; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
         .card-desc { font-size: 0.95rem; opacity: 0.6; line-height: 1.6; }
 
-        /* Click Particle */
         .particle {
             position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%;
             pointer-events: none; animation: pop 0.6s ease-out forwards;
         }
         @keyframes pop { to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
 
+        /* --- SECRET BUTTON --- */
+        #secret-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: rgba(255, 0, 60, 0.1); border: 1px solid rgba(255, 0, 60, 0.4);
+            color: var(--danger); font-family: 'JetBrains Mono'; font-size: 10px;
+            padding: 10px 20px; cursor: pointer; z-index: 100; text-transform: uppercase;
+            letter-spacing: 2px; transition: 0.3s; animation: pulse-red 2s infinite;
+        }
+        #secret-btn:hover { background: var(--danger); color: black; box-shadow: 0 0 20px var(--danger); }
+        @keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- SNAKE GAME --- */
+        #snake-game-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;
+        }
+        #game-canvas {
+            border: 2px solid #333; background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .snake-score { font-family: 'JetBrains Mono'; font-size: 2rem; margin-bottom: 20px; color: var(--danger); text-shadow: 0 0 10px var(--danger); }
+
         @media (max-width: 768px) {
             .flashcard { padding: 40px; width: 85%; }
             h1 { font-size: 3rem; }
-            #cursor, #cursor-dot { display: none; } /* Disable custom cursor on mobile */
+            #cursor, #cursor-dot { display: none; }
             * { cursor: auto; }
+            #secret-btn { bottom: 20px; right: 20px; }
         }
     </style>
 </head>
@@ -227,6 +238,8 @@
             <div class="nav-item hover-text" data-text="Bahrain / 2026">Bahrain / 2026</div>
         </div>
     </nav>
+
+    <button id="secret-btn" class="hover-trigger" onclick="openSnake()">DON'T CLICK ME</button>
 
     <div class="main-scroller">
         
@@ -303,35 +316,21 @@
 
     </div>
 
-    <div id="geo-overlay" class="overlay">
-        <div class="overlay-content">
-            <div class="overlay-header"><h2 class="overlay-title">Geo-Politics</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
-            <div class="grid-cards">
-                <div class="info-card"><div class="card-title">Global Relations</div><div class="card-desc">Analyzing diplomatic ties and shifting power dynamics in the Middle East and beyond.</div></div>
-                <div class="info-card"><div class="card-title">Policy & Strategy</div><div class="card-desc">Understanding strategic decisions behind national security and trade agreements.</div></div>
-                <div class="info-card"><div class="card-title">Historical Context</div><div class="card-desc">Studying 20th-century history to predict future geopolitical trends.</div></div>
-            </div>
-        </div>
-    </div>
+    <div id="geo-overlay" class="overlay"><div class="overlay-content"><div class="overlay-header"><h2 class="overlay-title">Geo-Politics</h2><button class="close-btn" onclick="closeAll()">Close</button></div><div class="grid-cards"><div class="info-card"><div class="card-title">Global Relations</div><div class="card-desc">Analyzing diplomatic ties and shifting power dynamics in the Middle East and beyond.</div></div><div class="info-card"><div class="card-title">Policy & Strategy</div><div class="card-desc">Understanding strategic decisions behind national security and trade agreements.</div></div><div class="info-card"><div class="card-title">Historical Context</div><div class="card-desc">Studying 20th-century history to predict future geopolitical trends.</div></div></div></div></div>
+    <div id="ai-overlay" class="overlay"><div class="overlay-content"><div class="overlay-header"><h2 class="overlay-title">AI & Neural</h2><button class="close-btn" onclick="closeAll()">Close</button></div><div class="grid-cards"><div class="info-card"><div class="card-title">Neural Networks</div><div class="card-desc">Deep Learning architectures, Transformers, and LLM fine-tuning mechanisms.</div></div><div class="info-card"><div class="card-title">Ethics of AI</div><div class="card-desc">Debating the alignment problem and the socio-economic impact of automation.</div></div><div class="info-card"><div class="card-title">Applications</div><div class="card-desc">Using Python and PyTorch to build experimental predictive models.</div></div></div></div></div>
+    <div id="debate-overlay" class="overlay"><div class="overlay-content"><div class="overlay-header"><h2 class="overlay-title">Debate</h2><button class="close-btn" onclick="closeAll()">Close</button></div><div class="grid-cards"><div class="info-card"><div class="card-title">Model UN</div><div class="card-desc">Delegate / Diplomacy / Resolution Drafting</div></div><div class="info-card"><div class="card-title">Public Speaking</div><div class="card-desc">Rhetoric / Persuasion / Logical Fallacies</div></div><div class="info-card"><div class="card-title">Critical Thinking</div><div class="card-desc">Deconstructing arguments and rebuilding frameworks.</div></div></div></div></div>
 
-    <div id="ai-overlay" class="overlay">
-        <div class="overlay-content">
-            <div class="overlay-header"><h2 class="overlay-title">AI & Neural</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
-            <div class="grid-cards">
-                <div class="info-card"><div class="card-title">Neural Networks</div><div class="card-desc">Deep Learning architectures, Transformers, and LLM fine-tuning mechanisms.</div></div>
-                <div class="info-card"><div class="card-title">Ethics of AI</div><div class="card-desc">Debating the alignment problem and the socio-economic impact of automation.</div></div>
-                <div class="info-card"><div class="card-title">Applications</div><div class="card-desc">Using Python and PyTorch to build experimental predictive models.</div></div>
+    <div id="snake-overlay" class="overlay">
+        <div class="overlay-content" style="height:90vh; display:flex; flex-direction:column; justify-content:center;">
+            <div class="overlay-header">
+                <h2 class="overlay-title" style="color:var(--danger);">SYSTEM BREACH</h2>
+                <button class="close-btn" onclick="closeSnake()">TERMINATE</button>
             </div>
-        </div>
-    </div>
-
-    <div id="debate-overlay" class="overlay">
-        <div class="overlay-content">
-            <div class="overlay-header"><h2 class="overlay-title">Debate</h2><button class="close-btn" onclick="closeAll()">Close</button></div>
-            <div class="grid-cards">
-                <div class="info-card"><div class="card-title">Model UN</div><div class="card-desc">Delegate / Diplomacy / Resolution Drafting</div></div>
-                <div class="info-card"><div class="card-title">Public Speaking</div><div class="card-desc">Rhetoric / Persuasion / Logical Fallacies</div></div>
-                <div class="info-card"><div class="card-title">Critical Thinking</div><div class="card-desc">Deconstructing arguments and rebuilding frameworks.</div></div>
+            <div id="snake-game-container">
+                <div class="snake-score">SCORE: <span id="score">0</span></div>
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+                <div style="margin-top:20px; font-family:'JetBrains Mono'; opacity:0.6;">USE ARROW KEYS TO NAVIGATE</div>
+                <button class="action-btn" onclick="startGame()" style="margin-top:20px;">INITIALIZE PROTOCOL</button>
             </div>
         </div>
     </div>
@@ -340,48 +339,37 @@
         // --- 1. QUANTUM CURSOR ---
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursor-dot');
-        
         let mouseX = 0, mouseY = 0;
         let cursorX = 0, cursorY = 0;
 
         document.addEventListener('mousemove', e => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorDot.style.left = mouseX + 'px';
-            cursorDot.style.top = mouseY + 'px';
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px';
         });
 
-        // Smooth follow
         function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
+            cursorX += (mouseX - cursorX) * 0.15; cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px'; cursor.style.top = cursorY + 'px';
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
 
-        // Hover effect for buttons
         document.querySelectorAll('.hover-trigger, .hover-text').forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
         });
 
-        // --- 2. TEXT DECRYPTION EFFECT ---
+        // --- 2. TEXT DECRYPTION ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        
         document.querySelectorAll('.hover-text').forEach(el => {
             el.addEventListener('mouseover', event => {
                 let iterations = 0;
                 const originalText = event.target.dataset.text;
                 const interval = setInterval(() => {
-                    event.target.innerText = originalText.split("")
-                        .map((letter, index) => {
-                            if(index < iterations) return originalText[index];
-                            return letters[Math.floor(Math.random() * 26)];
-                        })
-                        .join("");
-                    
+                    event.target.innerText = originalText.split("").map((letter, index) => {
+                        if(index < iterations) return originalText[index];
+                        return letters[Math.floor(Math.random() * 26)];
+                    }).join("");
                     if(iterations >= originalText.length) clearInterval(interval);
                     iterations += 1 / 3;
                 }, 30);
@@ -390,31 +378,21 @@
 
         // --- 3. CLICK EXPLOSION ---
         document.addEventListener('click', e => {
-            const amount = 10;
-            for(let i=0; i<amount; i++) {
+            for(let i=0; i<10; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 document.body.appendChild(particle);
-                
-                const x = e.clientX;
-                const y = e.clientY;
-                particle.style.left = x + 'px';
-                particle.style.top = y + 'px';
-                
-                // Random Direction
+                const x = e.clientX; const y = e.clientY;
+                particle.style.left = x + 'px'; particle.style.top = y + 'px';
                 const angle = Math.random() * Math.PI * 2;
                 const velocity = Math.random() * 50 + 20;
-                const dx = Math.cos(angle) * velocity + 'px';
-                const dy = Math.sin(angle) * velocity + 'px';
-                
-                particle.style.setProperty('--dx', dx);
-                particle.style.setProperty('--dy', dy);
-                
+                particle.style.setProperty('--dx', Math.cos(angle) * velocity + 'px');
+                particle.style.setProperty('--dy', Math.sin(angle) * velocity + 'px');
                 setTimeout(() => particle.remove(), 600);
             }
         });
 
-        // --- 4. HYPERDRIVE STARFIELD (Preserved) ---
+        // --- 4. HYPERDRIVE STARFIELD ---
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
         let width, height, stars = [];
@@ -425,11 +403,7 @@
             canvas.width = width; canvas.height = height;
             stars = [];
             for(let i=0; i<400; i++) {
-                stars.push({
-                    x: Math.random() * width, y: Math.random() * height,
-                    z: Math.random() * 2 + 0.5, o: Math.random(),
-                    size: Math.random() * 2
-                });
+                stars.push({ x: Math.random() * width, y: Math.random() * height, z: Math.random() * 2 + 0.5, o: Math.random() });
             }
         }
 
@@ -437,26 +411,24 @@
             ctx.clearRect(0,0,width,height);
             ctx.fillStyle = "white";
             const speedMult = isWarping ? 30 : 1;
-
             stars.forEach(star => {
                 star.y -= (0.2 * star.z) * speedMult;
                 if(star.y < 0) { star.y = height; star.x = Math.random() * width; }
-
                 ctx.beginPath();
                 if(isWarping) {
-                    ctx.strokeStyle = `rgba(255,255,255,${star.o})`;
-                    ctx.lineWidth = star.z;
-                    ctx.moveTo(star.x, star.y);
-                    ctx.lineTo(star.x, star.y + 40 * star.z);
-                    ctx.stroke();
+                    ctx.strokeStyle = `rgba(255,255,255,${star.o})`; ctx.lineWidth = star.z;
+                    ctx.moveTo(star.x, star.y); ctx.lineTo(star.x, star.y + 40 * star.z); ctx.stroke();
                 } else {
                     let offsetX = (mouseX - width/2) * 0.0002 * star.z;
                     star.o += (Math.random() - 0.5) * 0.05;
                     if(star.o < 0.2) star.o = 0.2; if(star.o > 1) star.o = 1;
-                    
-                    ctx.globalAlpha = star.o;
-                    ctx.arc(star.x - offsetX, star.y, star.z * 0.8, 0, Math.PI*2);
-                    ctx.fill();
+                    ctx.globalAlpha = star.o; ctx.arc(star.x - offsetX, star.y, star.z * 0.8, 0, Math.PI*2); ctx.fill();
+                    let dx = mouseX - (star.x - offsetX); let dy = mouseY - star.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if(dist < 120) {
+                        ctx.strokeStyle = `rgba(255,255,255,${1 - dist/120})`; ctx.lineWidth = 0.5;
+                        ctx.beginPath(); ctx.moveTo(star.x - offsetX, star.y); ctx.lineTo(mouseX, mouseY); ctx.stroke();
+                    }
                 }
             });
             requestAnimationFrame(animateStars);
@@ -473,7 +445,7 @@
         window.addEventListener('resize', initStars);
         initStars(); animateStars();
 
-        // --- 5. FLOATING DATA RAIN (Preserved) ---
+        // --- 5. FLOATING DATA RAIN ---
         const rainContainer = document.getElementById('data-rain');
         function createRain() {
             const el = document.createElement('div');
@@ -486,7 +458,7 @@
         }
         setInterval(createRain, 800);
 
-        // --- 6. TYPEWRITER (Preserved) ---
+        // --- 6. TYPEWRITER ---
         const text = "Welcome to the index.";
         const typeTarget = document.getElementById('type-target');
         let typeIdx = 0;
@@ -499,7 +471,7 @@
         }
         setTimeout(typeWriter, 1000);
 
-        // --- 7. SCROLL GLITCH & TILT ---
+        // --- 7. SCROLL GLITCH ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -515,28 +487,83 @@
         }, { threshold: 0.4 });
         document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-        document.querySelectorAll('.mag-btn').forEach(btn => {
-            btn.addEventListener('mousemove', e => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width/2;
-                const y = e.clientY - rect.top - rect.height/2;
-                btn.style.transform = `translate(${x*0.3}px, ${y*0.3}px)`;
+        // --- 8. SNAKE GAME LOGIC ---
+        let gameInterval;
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 15, y: 15};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        const gridSize = 20;
+        const tileCount = 20;
+        const gameCanvas = document.getElementById('game-canvas');
+        const gCtx = gameCanvas.getContext('2d');
+
+        function openSnake() {
+            document.getElementById('snake-overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSnake() {
+            document.getElementById('snake-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            clearInterval(gameInterval);
+        }
+
+        function startGame() {
+            snake = [{x: 10, y: 10}];
+            dx = 0; dy = 0; score = 0;
+            document.getElementById('score').innerText = score;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, 100);
+        }
+
+        function gameLoop() {
+            snake[0].x += dx;
+            snake[0].y += dy;
+
+            if (snake[0].x < 0) snake[0].x = tileCount - 1;
+            if (snake[0].x >= tileCount) snake[0].x = 0;
+            if (snake[0].y < 0) snake[0].y = tileCount - 1;
+            if (snake[0].y >= tileCount) snake[0].y = 0;
+
+            for (let i = snake.length - 1; i > 0; i--) {
+                snake[i] = { ...snake[i - 1] };
+            }
+
+            if (snake[0].x === food.x && snake[0].y === food.y) {
+                score++;
+                document.getElementById('score').innerText = score;
+                snake.push({});
+                food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
+            }
+
+            // Draw
+            gCtx.fillStyle = 'black';
+            gCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            gCtx.fillStyle = '#ff003c'; // Snake Color
+            snake.forEach((part, index) => {
+                // Don't draw tail on head position immediately (visual fix)
+                if(index === 0) gCtx.fillStyle = '#fff';
+                else gCtx.fillStyle = '#ff003c';
+                gCtx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
             });
-            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+
+            gCtx.fillStyle = '#00ff00'; // Food
+            gCtx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(document.getElementById('snake-overlay').style.display === 'block') {
+                if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -1; }
+                if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 1; }
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -1; dy = 0; }
+                if (e.key === 'ArrowRight' && dx === 0) { dx = 1; dy = 0; }
+            }
         });
 
-        document.querySelectorAll('.flashcard').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-                card.style.transform = `perspective(2000px) rotateX(${((y - rect.height/2)/100)*-1}deg) rotateY(${((x - rect.width/2)/100)}deg)`;
-            });
-            card.addEventListener('mouseleave', () => card.style.transform = 'perspective(2000px) rotateX(0) rotateY(0)');
-        });
-
+        // --- UTILS ---
         function openOverlay(id) { document.getElementById(id).style.display = 'block'; document.body.style.overflow = 'hidden'; }
         function closeAll() { document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); document.body.style.overflow = 'auto'; }
     </script>
