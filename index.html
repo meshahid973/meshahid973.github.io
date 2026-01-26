@@ -10,8 +10,8 @@
         :root {
             --bg-deep: #030304;
             --accent: #ffffff;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -20,14 +20,27 @@
             font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
         }
 
-        /* --- BACKGROUND --- */
+        /* --- BACKGROUND LAYERS --- */
+        #nebula {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(76, 29, 149, 0.15), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.1), transparent 50%);
+            filter: blur(60px);
+            animation: nebula-drift 20s infinite alternate ease-in-out;
+        }
+        @keyframes nebula-drift {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
         #starfield {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
+            z-index: 1; pointer-events: none;
         }
 
         .noise {
-            position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
+            position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.03;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
@@ -35,9 +48,9 @@
         nav {
             position: fixed; top: 0; left: 0; width: 100%; padding: 40px 60px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; mix-blend-mode: difference; pointer-events: none;
+            z-index: 100; pointer-events: none; mix-blend-mode: overlay;
         }
-        .nav-item { font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+        .nav-item { font-family: 'JetBrains Mono'; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; }
 
         /* --- SCROLLER --- */
         .main-scroller {
@@ -48,53 +61,54 @@
 
         .section {
             height: 100vh; display: flex; justify-content: center; align-items: center;
-            scroll-snap-align: center; perspective: 1200px;
+            scroll-snap-align: center; perspective: 2000px; /* Flatter perspective */
         }
 
         /* --- FLASHCARD --- */
         .flashcard {
             background: var(--glass); 
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 80px; width: 90%; max-width: 700px; border-radius: 4px;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 80px; width: 90%; max-width: 700px; border-radius: 12px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            transform-style: preserve-3d; transition: transform 0.1s ease-out;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.6); /* Softer shadow */
+            transform-style: preserve-3d; transition: transform 0.2s ease-out; /* Smoother transition */
             position: relative; overflow: hidden;
         }
 
-        .flashcard::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-20deg); transition: 0.5s; pointer-events: none;
+        /* Subtle Sheen */
+        .flashcard::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.03), transparent 40%);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
         }
-        .flashcard:hover::after { left: 100%; transition: 0.8s; }
+        .flashcard:hover::before { opacity: 1; }
 
         h1 {
-            font-size: 5rem; margin: 0; font-weight: 900; letter-spacing: -4px;
-            background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            transform: translateZ(40px);
+            font-size: 5rem; margin: 0; font-weight: 900; letter-spacing: -3px;
+            background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: translateZ(20px); /* Reduced depth */
         }
-        p { font-size: 1.2rem; margin-top: 20px; opacity: 0.6; font-weight: 300; transform: translateZ(20px); }
+        p { font-size: 1.2rem; margin-top: 20px; opacity: 0.7; font-weight: 300; transform: translateZ(10px); line-height: 1.6; }
 
         /* --- BUTTONS --- */
-        .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; transform: translateZ(30px); }
+        .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; transform: translateZ(15px); }
         
         .action-btn {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
-            padding: 20px 30px; color: white; cursor: pointer; text-align: left;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
+            padding: 22px 30px; color: white; cursor: pointer; text-align: left;
             display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.3s var(--ease); border-radius: 4px; text-decoration: none;
+            transition: all 0.4s var(--ease); border-radius: 6px; text-decoration: none;
         }
         .action-btn:hover {
-            background: rgba(255,255,255,0.1); padding-left: 40px; border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); transform: translateX(5px);
         }
-        .btn-label { font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 15px; }
-        .btn-icon { opacity: 0.5; font-size: 0.9rem; }
+        .btn-label { font-weight: 500; font-size: 1.05rem; display: flex; align-items: center; gap: 15px; }
+        .btn-icon { opacity: 0.6; font-size: 0.9rem; }
         .btn-arrow { opacity: 0; transform: translateX(-10px); transition: 0.3s; }
         .action-btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
 
         .scroll-down {
-            margin-top: 40px; background: none; border: none; color: rgba(255,255,255,0.3);
+            margin-top: 50px; background: none; border: none; color: rgba(255,255,255,0.2);
             font-size: 1.5rem; cursor: pointer; transition: 0.3s; animation: bounce 2s infinite;
         }
         .scroll-down:hover { color: white; }
@@ -124,19 +138,19 @@
         /* --- INTEREST GRIDS --- */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .info-card {
-            background: rgba(255,255,255,0.05); padding: 30px; border-radius: 8px;
+            background: rgba(255,255,255,0.03); padding: 35px; border-radius: 12px;
             border: 1px solid var(--glass-border); transition: 0.3s;
         }
-        .info-card:hover { border-color: white; transform: translateY(-5px); }
-        .card-icon { font-size: 2rem; margin-bottom: 15px; opacity: 0.8; }
-        .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
-        .card-desc { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
+        .info-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+        .card-icon { font-size: 2rem; margin-bottom: 20px; opacity: 0.8; color: #a5b4fc; }
+        .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
+        .card-desc { font-size: 0.95rem; opacity: 0.6; line-height: 1.6; }
 
         .list-item {
-            display: flex; justify-content: space-between; padding: 20px;
-            border-bottom: 1px solid var(--glass-border); align-items: center;
+            display: flex; justify-content: space-between; padding: 25px;
+            border-bottom: 1px solid var(--glass-border); align-items: center; transition: 0.2s;
         }
-        .list-item:hover { background: rgba(255,255,255,0.03); }
+        .list-item:hover { background: rgba(255,255,255,0.03); padding-left: 30px; }
 
         @media (max-width: 768px) {
             .flashcard { padding: 40px; width: 85%; }
@@ -146,6 +160,7 @@
 </head>
 <body>
 
+    <div id="nebula"></div>
     <canvas id="starfield"></canvas>
     <div class="noise"></div>
 
@@ -167,7 +182,7 @@
         <div class="section" id="sec2">
             <div class="flashcard">
                 <h1>Profile</h1>
-                <p>15 years old. Based in Bahrain.<br>Exploring the intersection of policy and artificial intelligence.</p>
+                <p>15 years old. Based in Bahrain.<br>Analyzing the intersection of global policy and neural architecture.</p>
                 <button class="scroll-down" onclick="document.getElementById('sec3').scrollIntoView();">↓</button>
             </div>
         </div>
@@ -273,24 +288,24 @@
             <div class="grid-cards" style="grid-template-columns: 1fr;">
                 <div class="list-item">
                     <div>
-                        <div style="font-size:1.5rem; font-weight:bold;">Model UN</div>
-                        <div style="opacity:0.6;">Delegate / Diplomacy / Resolution Drafting</div>
+                        <div style="font-size:1.3rem; font-weight:700;">Model UN</div>
+                        <div style="opacity:0.6; margin-top:5px;">Delegate / Diplomacy / Resolution Drafting</div>
                     </div>
-                    <i class="fas fa-user-tie" style="font-size:1.5rem; opacity:0.5;"></i>
+                    <i class="fas fa-user-tie" style="font-size:1.5rem; opacity:0.3;"></i>
                 </div>
                 <div class="list-item">
                     <div>
-                        <div style="font-size:1.5rem; font-weight:bold;">Public Speaking</div>
-                        <div style="opacity:0.6;">Rhetoric / Persuasion / Logical Fallacies</div>
+                        <div style="font-size:1.3rem; font-weight:700;">Public Speaking</div>
+                        <div style="opacity:0.6; margin-top:5px;">Rhetoric / Persuasion / Logical Fallacies</div>
                     </div>
-                    <i class="fas fa-microphone-alt" style="font-size:1.5rem; opacity:0.5;"></i>
+                    <i class="fas fa-microphone-alt" style="font-size:1.5rem; opacity:0.3;"></i>
                 </div>
                 <div class="list-item">
                     <div>
-                        <div style="font-size:1.5rem; font-weight:bold;">Critical Thinking</div>
-                        <div style="opacity:0.6;">Deconstructing arguments and rebuilding frameworks.</div>
+                        <div style="font-size:1.3rem; font-weight:700;">Critical Thinking</div>
+                        <div style="opacity:0.6; margin-top:5px;">Deconstructing arguments and rebuilding frameworks.</div>
                     </div>
-                    <i class="fas fa-puzzle-piece" style="font-size:1.5rem; opacity:0.5;"></i>
+                    <i class="fas fa-puzzle-piece" style="font-size:1.5rem; opacity:0.3;"></i>
                 </div>
             </div>
         </div>
@@ -309,13 +324,14 @@
             height = window.innerHeight;
             canvas.width = width; canvas.height = height;
             stars = [];
-            for(let i=0; i<300; i++) {
+            for(let i=0; i<350; i++) {
                 stars.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
                     z: Math.random() * 2 + 0.5,
                     o: Math.random(),
-                    s: Math.random() * 0.05 + 0.02
+                    s: Math.random() * 0.05 + 0.02,
+                    isShooting: false
                 });
             }
         }
@@ -324,7 +340,35 @@
             ctx.clearRect(0,0,width,height);
             ctx.fillStyle = "white";
             
-            stars.forEach(star => {
+            // Random Shooting Star Logic
+            if(Math.random() > 0.98) {
+                stars.push({
+                    x: Math.random() * width, y: 0, z: 0, o: 1, s: 0, isShooting: true, 
+                    vx: (Math.random() - 0.5) * 5, vy: Math.random() * 10 + 5
+                });
+            }
+
+            for(let i = 0; i < stars.length; i++) {
+                let star = stars[i];
+
+                if(star.isShooting) {
+                    star.x += star.vx;
+                    star.y += star.vy;
+                    star.o -= 0.02;
+                    
+                    ctx.globalAlpha = star.o;
+                    ctx.beginPath();
+                    ctx.strokeStyle = "rgba(255,255,255," + star.o + ")";
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(star.x, star.y);
+                    ctx.lineTo(star.x - star.vx * 3, star.y - star.vy * 3); // Trail
+                    ctx.stroke();
+
+                    if(star.o <= 0) { stars.splice(i, 1); i--; }
+                    continue;
+                }
+
+                // Regular Stars
                 star.y -= 0.2 * star.z; 
                 let offsetX = (mouseX - width/2) * 0.0002 * star.z;
                 let offsetY = (mouseY - height/2) * 0.0002 * star.z;
@@ -338,7 +382,7 @@
                 ctx.beginPath();
                 ctx.arc(star.x - offsetX, star.y - offsetY, star.z * 0.8, 0, Math.PI*2);
                 ctx.fill();
-            });
+            }
             requestAnimationFrame(animateStars);
         }
 
@@ -346,15 +390,32 @@
         window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
         initStars(); animateStars();
 
-        // --- TILT EFFECT ---
+        // --- SUBTLE 3D TILT EFFECT ---
         document.querySelectorAll('.flashcard').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) - rect.width/2;
-                const y = (e.clientY - rect.top) - rect.height/2;
-                card.style.transform = `perspective(1000px) rotateY(${x/40}deg) rotateX(${-y/40}deg)`;
+                // Localize mouse position within card
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // For Rotation: Center point
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Glow follow
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                // Subtle Tilt Math (Divide by 100 for subtle effect)
+                const rotateX = ((y - centerY) / 100) * -1;
+                const rotateY = (x - centerX) / 100;
+
+                card.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
-            card.addEventListener('mouseleave', () => card.style.transform = `perspective(1000px) rotateY(0) rotateX(0)`);
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(2000px) rotateX(0) rotateY(0)`;
+            });
         });
 
         // --- OVERLAY LOGIC ---
