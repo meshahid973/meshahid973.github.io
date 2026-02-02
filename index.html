@@ -162,7 +162,7 @@
         }
         .review-author:hover { opacity: 1; }
 
-        /* --- NEW PREMIUM MUSIC PLAYER --- */
+        /* --- PREMIUM MUSIC PLAYER --- */
         .music-player {
             position: fixed; bottom: 40px; right: 40px; z-index: 1000;
             background: rgba(10, 10, 15, 0.5); 
@@ -179,98 +179,100 @@
         .music-player:hover { 
             border-color: rgba(255,255,255,0.25); 
             box-shadow: 0 0 30px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.6);
-            transform: scale(1.02) translateY(-5px);
+            transform: scale(1.02) translateY(-2px);
         }
 
-        /* Vinyl with Neon Ring */
-        .disc-wrapper {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: #111; border: 1px solid rgba(255,255,255,0.1);
-            position: relative; overflow: hidden; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        .disc-glow {
-            position: absolute; inset: -50%; background: conic-gradient(transparent, rgba(255,255,255,0.3), transparent);
-            animation: rotate 4s linear infinite; opacity: 0; transition: opacity 0.5s;
-        }
+        .disc-wrapper { width: 44px; height: 44px; border-radius: 50%; background: #111; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .disc-glow { position: absolute; inset: -50%; background: conic-gradient(transparent, rgba(255,255,255,0.3), transparent); animation: rotate 4s linear infinite; opacity: 0; transition: opacity 0.5s; }
         .music-player.playing .disc-glow { opacity: 1; }
-        
-        .disc-art {
-            width: 100%; height: 100%; border-radius: 50%; opacity: 0.9; z-index: 2;
-            background: url('https://i.scdn.co/image/ab67616d0000b2737a18e3230d32204a92c43331') center/cover;
-            animation: spin 6s linear infinite; animation-play-state: paused;
-        }
-        .disc-center {
-            position: absolute; width: 8px; height: 8px; background: #08080a; border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.2); z-index: 3;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .disc-art { width: 100%; height: 100%; border-radius: 50%; opacity: 0.9; background: url('https://i.scdn.co/image/ab67616d0000b2737a18e3230d32204a92c43331') center/cover; animation: spin 6s linear infinite; animation-play-state: paused; z-index: 2; }
+        .disc-center { position: absolute; width: 8px; height: 8px; background: #08080a; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); z-index: 3; }
+        @keyframes spin { 100% { transform: rotate(360deg); } } @keyframes rotate { 100% { transform: rotate(360deg); } }
 
-        /* Track Info */
         .track-info { display: flex; flex-direction: column; justify-content: center; margin-right: 8px; min-width: 80px; }
         .track-name { font-size: 0.85rem; font-weight: 700; color: white; margin-bottom: 3px; }
-        
-        /* Animated Waveform */
         .waveform { display: flex; align-items: flex-end; gap: 3px; height: 12px; }
-        .bar { 
-            width: 3px; border-radius: 2px; 
-            background: linear-gradient(to top, rgba(255,255,255,0.3), rgba(255,255,255,0.9));
-            animation: wave 0.8s ease-in-out infinite; 
-        }
-        .bar:nth-child(1) { height: 40%; animation-delay: 0s; }
-        .bar:nth-child(2) { height: 80%; animation-delay: 0.1s; }
-        .bar:nth-child(3) { height: 50%; animation-delay: 0.2s; }
-        .bar:nth-child(4) { height: 90%; animation-delay: 0.3s; }
+        .bar { width: 3px; border-radius: 2px; background: linear-gradient(to top, rgba(255,255,255,0.3), rgba(255,255,255,0.9)); animation: wave 0.8s ease-in-out infinite; }
+        .bar:nth-child(1) { height: 40%; animation-delay: 0s; } .bar:nth-child(2) { height: 80%; animation-delay: 0.1s; } .bar:nth-child(3) { height: 50%; animation-delay: 0.2s; } .bar:nth-child(4) { height: 90%; animation-delay: 0.3s; }
         @keyframes wave { 0%, 100% { height: 30%; opacity: 0.5; } 50% { height: 100%; opacity: 1; } }
-        
         .music-player.paused .bar { animation-play-state: paused; height: 2px; opacity: 0.2; }
         .music-player.playing .disc-art { animation-play-state: running; }
 
-        /* Controls */
         .controls { display: flex; gap: 12px; align-items: center; }
         .ctrl-btn { background: none; border: none; color: white; cursor: pointer; opacity: 0.6; transition: 0.2s; font-size: 0.9rem; }
         .ctrl-btn:hover { opacity: 1; transform: scale(1.2); color: #fff; }
-        
-        /* Progress Bar */
-        .music-player::after {
-            content: ''; position: absolute; bottom: 0; left: 24px; right: 24px; height: 1px;
-            background: rgba(255,255,255,0.1);
+        .progress-bar-container { position: absolute; bottom: 0; left: 24px; right: 24px; height: 2px; background: rgba(255,255,255,0.05); overflow: hidden; border-radius: 2px; }
+        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fff, #a5b4fc); transition: width 0.1s linear; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        /* --- PREMIUM TIME WIDGET --- */
+        .time-widget {
+            position: fixed; bottom: 130px; right: 40px; z-index: 999;
+            background: rgba(12, 12, 16, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-top-color: rgba(255,255,255,0.15); /* Highlight top */
+            padding: 14px 28px;
+            display: flex; flex-direction: column; align-items: flex-end;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            opacity: 0; transform: translateY(30px);
+            transition: all 0.5s var(--ease);
+            min-width: 150px;
         }
-        .progress-bar {
-            position: absolute; bottom: 0; left: 24px; height: 1px; width: 0%;
-            background: linear-gradient(90deg, #fff, #a5b4fc);
-            transition: width 0.1s linear;
-            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+        body.loaded .time-widget { opacity: 1; transform: translateY(0); }
+        .time-widget:hover { 
+            background: rgba(15, 15, 20, 0.7); 
+            border-color: rgba(255,255,255,0.2); 
+            transform: translateY(-4px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        .time-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+        }
+        .time-live {
+            width: 6px; height: 6px; background: #ef4444; border-radius: 50%;
+            box-shadow: 0 0 8px #ef4444; animation: blink 2s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.4; } }
+        
+        .time-location {
+            font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #a5b4fc;
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+        }
+        
+        .time-wrapper { display: flex; align-items: baseline; gap: 6px; }
+        
+        .time-digits {
+            font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 700; 
+            letter-spacing: -1px; line-height: 1;
+            /* Gradient Text */
+            background: linear-gradient(180deg, #fff 20%, #cbd5e1 100%);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
+        }
+        
+        .time-meta {
+            display: flex; flex-direction: column; align-items: flex-start;
+        }
+        .time-ampm {
+            font-family: 'JetBrains Mono'; font-size: 0.75rem; color: white; font-weight: 600;
+        }
+        .time-date {
+            font-family: 'JetBrains Mono'; font-size: 0.65rem; color: rgba(255,255,255,0.5);
         }
 
         /* --- OVERLAYS --- */
-        .overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            z-index: 2000; overflow-y: auto; backdrop-filter: blur(20px);
-            animation: fadeIn 0.3s var(--ease);
-        }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; backdrop-filter: blur(20px); animation: fadeIn 0.3s var(--ease); }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
         .overlay-content { max-width: 1000px; margin: 100px auto; padding: 40px; }
-        .overlay-header { 
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--glass-border); padding-bottom: 25px; margin-bottom: 40px; 
-        }
+        .overlay-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 25px; margin-bottom: 40px; }
         .overlay-title { font-size: 2.5rem; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
-        .close-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; 
-            padding: 8px 20px; border-radius: 100px; cursor: pointer; transition: 0.2s; 
-            font-family: 'JetBrains Mono'; font-size: 0.75rem; text-transform: uppercase;
-        }
+        .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 8px 20px; border-radius: 100px; cursor: pointer; transition: 0.2s; font-family: 'JetBrains Mono'; font-size: 0.75rem; text-transform: uppercase; }
         .close-btn:hover { background: white; color: black; }
-
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-        .info-card { 
-            background: rgba(255,255,255,0.02); padding: 32px; border-radius: 12px; 
-            border: 1px solid var(--glass-border); transition: 0.3s; backdrop-filter: blur(20px);
-        }
+        .info-card { background: rgba(255,255,255,0.02); padding: 32px; border-radius: 12px; border: 1px solid var(--glass-border); transition: 0.3s; backdrop-filter: blur(20px); }
         .info-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); }
         .card-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
         .card-desc { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
@@ -278,7 +280,8 @@
         @media (max-width: 768px) {
             .flashcard { padding: 40px; width: 85%; }
             h1 { font-size: 3rem; }
-            .music-player { bottom: 20px; right: 20px; width: auto; }
+            .music-player { bottom: 20px; right: 20px; width: auto; padding: 8px 16px; }
+            .time-widget { bottom: 95px; right: 20px; padding: 10px 20px; }
             .waveform { display: none; }
         }
     </style>
@@ -292,7 +295,7 @@
 
     <div id="enter-screen">
         <div class="enter-text" id="enter-btn">[ CLICK TO INITIALIZE ]</div>
-        <div class="enter-sub">hey there!</div>
+        <div class="enter-sub">AUDIO PROTOCOL ENABLED</div>
     </div>
 
     <div id="youtube-player" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"></div>
@@ -301,6 +304,20 @@
         <div class="nav-item">Ayyan</div>
         <div class="nav-item">Bahrain / 2026</div>
     </nav>
+
+    <div class="time-widget">
+        <div class="time-header">
+            <div class="time-live"></div>
+            <span class="time-location">BAHRAIN</span>
+        </div>
+        <div class="time-wrapper">
+            <div class="time-digits" id="bahrain-time">--:--</div>
+            <div class="time-meta">
+                <div class="time-ampm" id="bahrain-ampm">--</div>
+                <div class="time-date" id="bahrain-date">-- --</div>
+            </div>
+        </div>
+    </div>
 
     <div class="music-player paused" id="music-player-ui">
         <div class="disc-wrapper">
@@ -319,7 +336,9 @@
             <button class="ctrl-btn" id="play-pause"><i class="fas fa-play"></i></button>
             <button class="ctrl-btn"><i class="fas fa-forward"></i></button>
         </div>
-        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
     </div>
 
     <div class="main-scroller">
@@ -409,7 +428,29 @@
             spotlight.style.setProperty('--mouse-y', `${e.clientY}px`);
         });
 
-        // --- 2. YOUTUBE API & AUTOPLAY ---
+        // --- 2. TIME WIDGET LOGIC ---
+        function updateTime() {
+            const timeDisplay = document.getElementById('bahrain-time');
+            const ampmDisplay = document.getElementById('bahrain-ampm');
+            const dateDisplay = document.getElementById('bahrain-date');
+            const now = new Date();
+            
+            const options = { timeZone: 'Asia/Bahrain', hour12: true, hour: '2-digit', minute: '2-digit' };
+            const dateOptions = { timeZone: 'Asia/Bahrain', weekday: 'short', day: '2-digit' };
+            
+            const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
+            const dateString = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+            
+            const [time, ampm] = timeString.split(' ');
+            
+            timeDisplay.innerText = time;
+            ampmDisplay.innerText = ampm;
+            dateDisplay.innerText = dateString.toUpperCase();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // --- 3. YOUTUBE API & AUTOPLAY ---
         var player, progressInterval;
         let isPlayerReady = false;
         let isStarted = false;
@@ -443,7 +484,6 @@
                 if (isPlayerReady) {
                     player.playVideo();
                 } else {
-                    // Poll until ready if clicked too fast
                     const checkReady = setInterval(() => {
                         if (isPlayerReady) {
                             player.playVideo();
