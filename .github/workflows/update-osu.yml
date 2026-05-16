@@ -33,7 +33,7 @@ jobs:
           const user = "meshahid973";
 
           if (!key) {
-            throw new Error("Missing osu_key variable.");
+            throw new Error("Missing osu_key variable");
           }
 
           function cleanNumber(value) {
@@ -46,7 +46,13 @@ jobs:
           }
 
           async function main() {
-            const url = "https://osu.ppy.sh/api/get_user?k=" + encodeURIComponent(key) + "&u=" + encodeURIComponent(user) + "&m=0&type=string&event_days=31";
+            const url =
+              "https://osu.ppy.sh/api/get_user?k=" +
+              encodeURIComponent(key) +
+              "&u=" +
+              encodeURIComponent(user) +
+              "&m=0&type=string&event_days=31";
+
             const res = await fetch(url);
 
             if (!res.ok) {
@@ -82,7 +88,10 @@ jobs:
 
             const dir = path.join(process.cwd(), "data");
             fs.mkdirSync(dir, { recursive: true });
-            fs.writeFileSync(path.join(dir, "osu.json"), JSON.stringify(output, null, 2) + "\n");
+            fs.writeFileSync(
+              path.join(dir, "osu.json"),
+              JSON.stringify(output, null, 2) + "\n"
+            );
           }
 
           main();
