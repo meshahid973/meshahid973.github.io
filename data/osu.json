@@ -5,15 +5,15 @@
   "country": "BH",
   "country_rank": 183,
   "pp": 1784.57,
-  "accuracy": 92.94742584228516,
-  "playcount": 5667,
-  "level": 81.1862,
-  "total_seconds_played": 356860,
+  "accuracy": 92.94740295410156,
+  "playcount": 5672,
+  "level": 81.202,
+  "total_seconds_played": 357141,
   "grades": {
     "ss": 11,
     "s": 149,
     "a": 202
   },
-  "updated_at": "2026-07-08T01:42:34.053Z",
+  "updated_at": "2026-07-08T08:06:47.372Z",
   "error": false
 }
