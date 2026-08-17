@@ -1,19 +1,19 @@
 {
   "username": "meshahid973",
   "user_id": "39623453",
-  "rank": 458682,
+  "rank": 458710,
   "country": "BH",
   "country_rank": 147,
-  "pp": 2081.09,
-  "accuracy": 92.06075286865234,
-  "playcount": 7792,
-  "level": 93.2472,
-  "total_seconds_played": 497755,
+  "pp": 2081.15,
+  "accuracy": 92.05909729003906,
+  "playcount": 7810,
+  "level": 93.2861,
+  "total_seconds_played": 499034,
   "grades": {
     "ss": 12,
     "s": 161,
     "a": 279
   },
-  "updated_at": "2026-08-16T18:12:47.015Z",
+  "updated_at": "2026-08-17T00:36:33.458Z",
   "error": false
 }
